@@ -86,9 +86,28 @@ window.onload = function() {
     var buttons = [ { x: 30, y: 240, width: 150, height: 50, text: "New Game"},
                     { x: 30, y: 300, width: 150, height: 50, text: "Show Moves"},
                     { x: 30, y: 360, width: 150, height: 50, text: "Enable AI Bot"}];
-    
+
+    //
+    // var x_offset = (window.innerWidth - 620) / 2;
+    // var y_offset = (window.innerHeight - 620) / 2;
+
+    var sound_blip = new Audio('blip.mp3');
+    var sound_bird = new Audio('birds.mp3');
+    var sound_over = new Audio('over.mp3');
+    sound_bird.loop = true;
+
+    window.onload = window.onresize = function() {
+        var canvas = document.getElementById('canvas');
+        canvas.width = window.innerWidth * 0.8;
+        canvas.height = window.innerHeight * 0.8;
+    }
+
     // Initialize the game
     function init() {
+        // var canvas = document.getElementById("myCanvas");
+        // canvas.width = window.innerWidth ;
+        // canvas.height = window.innerHeight ;
+
         // Add mouse events
         canvas.addEventListener("mousemove", onMouseMove);
         canvas.addEventListener("mousedown", onMouseDown);
@@ -135,6 +154,7 @@ window.onload = function() {
             // Check for game over
             if (moves.length <= 0) {
                 gameover = true;
+                sound_over.play();
             }
             
             // Let the AI bot make a move, if enabled
@@ -309,24 +329,24 @@ window.onload = function() {
     // Draw a frame with a border
     function drawFrame() {
         // Draw background and a border
-        context.fillStyle = "#d0d0d0";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "#e8eaec";
+        // context.fillStyle = "#d0d0d0";
+        // context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "#fff";
         context.fillRect(1, 1, canvas.width-2, canvas.height-2);
         
-        // Draw header
-        context.fillStyle = "#303030";
-        context.fillRect(0, 0, canvas.width, 65);
-        
-        // Draw title
-        context.fillStyle = "#ffffff";
-        context.font = "24px Verdana";
-        context.fillText("Match3 Example - Rembound.com", 10, 30);
-        
-        // Display fps
-        context.fillStyle = "#ffffff";
-        context.font = "12px Verdana";
-        context.fillText("Fps: " + fps, 13, 50);
+        // // Draw header
+        // context.fillStyle = "#303030";
+        // context.fillRect(0, 0, canvas.width, 65);
+        //
+        // // Draw title
+        // context.fillStyle = "#ffffff";
+        // context.font = "24px Verdana";
+        // context.fillText("Match3 Example - Rembound.com", 10, 30);
+        //
+        // // Display fps
+        // context.fillStyle = "#ffffff";
+        // context.font = "12px Verdana";
+        // context.fillText("Fps: " + fps, 13, 50);
     }
     
     // Draw buttons
@@ -661,6 +681,7 @@ window.onload = function() {
     
     // Remove the clusters
     function removeClusters() {
+        sound_blip.play();
         // Change the type of the tiles to -1, indicating a removed tile
         loopClusters(function(index, column, row, cluster) { level.tiles[column][row].type = -1; });
 
@@ -842,6 +863,8 @@ window.onload = function() {
                 }
             }
         }
+
+        sound_bird.play();
     }
     
     function onMouseUp(e) {
